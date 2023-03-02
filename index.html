@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>オキニトークは負担😵‍💫</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="bg-dark">
+      <div class="container text-center">
+        <p class="m-0 text-white">オキニトークで</p>
+      </div>
+    </div>
+    <div id="app">
+      <!-- header -->
+      <div class="bg-white position-sticky top-0" style="z-index: 1">
+        <div class="container">
+          <div class="row py-2 justify-content-between align-items-center">
+            <div class="col">
+              <figure class="m-0">
+                <img
+                  src="./assets/img/cast.png"
+                  width="40"
+                  height="40"
+                  alt="キャストさんの宣材写真"
+                  class="rounded-pill"
+                  style="object-fit: cover"
+                />
+              </figure>
+            </div>
+            <div class="col-auto">
+              <select
+                class="form-select pe-4"
+                v-model="selectedUser"
+                @change="selectUser"
+              >
+                <option
+                  v-for="(user,index) in users"
+                  :key="index"
+                  :value="user.id"
+                  :selected="user.select"
+                >
+                  {{user.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- header -->
+      <!-- timeline -->
+      <div class="container py-3 d-flex gap-4 flex-wrap">
+        <!-- 注意事項 -->
+        <div class="alert alert-warning rounded mb-2 mb-md-5" role="alert">
+          <div class="d-flex gap-2 align-items-center mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path
+                d="M12.866 3l9.526 16.5a1 1 0 0 1-.866 1.5H2.474a1 1 0 0 1-.866-1.5L11.134 3a1 1 0 0 1 1.732 0zM11 16v2h2v-2h-2zm0-7v5h2V9h-2z"
+                fill="currentColor"
+              />
+            </svg>
+            <p class="m-0 fw-bold fs-5">注意事項</p>
+          </div>
+          <p class="mb-2">
+            中傷・脅迫・勧誘、その他の迷惑行為および弊社不適切と判断するメッセージは禁止致します。禁止事項に違反した場合、予告なくメッセージの削除・会員の退会をさせて頂く場合があります。送信した場合、これに同意したものとします。
+          </p>
+        </div>
+        <!-- 注意事項 -->
+        <div class="col-12 text-center">
+          <span class="bg-white rounded-pill px-3 py-1 lh-sm">{{today}}</span>
+        </div>
+        <!-- 女性側のメッセージ -->
+        <div class="col-12 row d-flex justify-content-start">
+          <div class="col-auto">
+            <figure>
+              <img
+                src="./assets/img/cast.png"
+                width="50"
+                height="50"
+                alt="キャストさんの宣材写真"
+                class="rounded-pill"
+                style="object-fit: cover"
+              />
+            </figure>
+          </div>
+          <div class="col col-md-auto">
+            <div class="bg-white rounded py-3 px-4 shadow-sm">
+              <p class="lh-lg">
+                初めまして【源氏名】です🌷<br />
+                オキニトークを解放致しましたのでご挨拶させてください💗<br />
+                【源氏名】をフォローしてくれてありがとうございます😊<br />
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- 女性側のメッセージ -->
+        <!-- 男性側のトーク -->
+        <div
+          v-if="talks.length != 0"
+          v-for="(talk,index) in talks"
+          :key="index"
+          class="col-12 row d-flex justify-content-end"
+        >
+          <div class="col col-md-auto">
+            <div class="bg-white shadow-sm rounded py-3 px-4">
+              <p class="lh-lg">{{talk}}</p>
+            </div>
+          </div>
+          <div class="col-auto">
+            <figure>
+              <img
+                :src="'./assets/img/'+ selectedUser +'.png'"
+                width="50"
+                height="50"
+                alt="キャストさんの宣材写真"
+                class="rounded-pill bg-white border"
+                style="object-fit: cover"
+              />
+            </figure>
+          </div>
+        </div>
+        <!-- 男性側のトーク -->
+      </div>
+      <!-- timeline -->
+      <!-- nav -->
+      <div class="bg-white position-fixed bottom-0 end-0 w-100">
+        <div class="container">
+          <div action="" class="py-2 py-md-3">
+            <div class="row justify-content-center">
+              <div class="col-10 col-md-9 pe-0">
+                <textarea
+                  v-model="message"
+                  class="form-control bg-light rounded border-0"
+                  id=""
+                  rows="1"
+                  maxlength="100"
+                  placeholder="一度に入力できる文字数には上限があるよ"
+                ></textarea>
+              </div>
+              <div class="col-auto px-0">
+                <button
+                  class="btn btn-link text-decoration-none"
+                  data-bs-toggle="modal"
+                  data-bs-target="#Modal"
+                >
+                  <span class="fw-bold text-primary">送信</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade"
+        id="Modal"
+        tabindex="-1"
+        aria-labelledby="ModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel">トークは課金制だよ</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p class="">
+                ユーザーは女性や店舗にスコアとして評価付けされ、そのスコアのレートによって課金額が変動するよ。綺麗に遊ぶ本指名さんは優遇されるし、スコアの低い悪質なユーザーは逆に冷遇するよ。
+                女性または店舗からの評価によって機能の体験を変えることで、ユーザーは綺麗に遊ぶようになるし、課金制にすることで無駄なトークのラリーを控えるようになるよ。
+              </p>
+              <p class="">{{message.length}}文字×{{selectedUser}}=</p>
+              <p class="fw-bold"><span class="small">円</span></p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                閉じる
+              </button>
+              <button type="button" class="btn btn-primary" @click="addTalk">
+                <span class="fw-bold"
+                  >（課金するという体裁で）トークを送る</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- nav -->
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            message: "",
+            today: "",
+            talks: [],
+            selectedUser: null,
+            users: [
+              {
+                id: 1,
+                name: "綺麗に遊ぶ本指名客",
+                rimit: 1,
+                icon: "",
+                select: true,
+              },
+              {
+                id: 2,
+                name: "通常のお客さんの場合",
+                rimit: 2,
+                icon: "",
+                select: false,
+              },
+              {
+                id: 3,
+                name: "利用履歴のないユーザー",
+                rimit: 3,
+                icon: "",
+                select: false,
+              },
+              {
+                id: 4,
+                name: "女性評価の低いユーザー",
+                rimit: 4,
+                icon: "",
+                select: false,
+              },
+            ],
+          };
+        },
+        mounted() {
+          const date = new Date();
+          const month = date.getMonth() + 1;
+          const day = date.getDate();
+          const week = ["日", "月", "火", "水", "木", "金", "土"][
+            date.getDay()
+          ];
+          this.today = `${month}月${day}日(${week})`;
+        },
+        methods: {
+          selectUser() {
+            console.log(this.selectedUser);
+            // セレクタの選択肢が変更されたときの処理を記述する
+            this.talks = [];
+          },
+          addTalk() {
+            this.talks.push(this.message);
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
