@@ -15,7 +15,7 @@
   <body class="bg-light">
     <div class="bg-dark">
       <div class="container text-center">
-        <p class="m-0 text-white">オキニトークで</p>
+        <p class="m-0 text-white">オキニトークの負担を考慮した改善案</p>
       </div>
     </div>
     <div id="app">
@@ -140,7 +140,12 @@
       <div class="bg-white position-fixed bottom-0 end-0 w-100 mt-4">
         <div class="container">
           <div action="" class="py-2 py-md-3">
-            <div class="row justify-content-center">
+            <div v-if="(5 - selectedUser) <= talks.length" class="text-center">
+              <p class="m-0 small">
+                トーク回数の上限に達しました。利用すると解除されます。
+              </p>
+            </div>
+            <div v-else class="row justify-content-center">
               <div class="col-10 col-md-9 pe-0">
                 <textarea
                   v-model="message"
@@ -148,7 +153,7 @@
                   id=""
                   rows="1"
                   maxlength="100"
-                  placeholder="一度に入力できる文字数には上限があるよ"
+                  placeholder="入力できる文字数には上限があるよ"
                 ></textarea>
               </div>
               <div class="col-auto px-0">
