@@ -45,7 +45,7 @@
                   v-for="(user,index) in users"
                   :key="index"
                   :value="user.id"
-                  :selected="user.select"
+                  :selected="user.id === selectedUser"
                 >
                   {{user.name}}
                 </option>
@@ -56,7 +56,7 @@
       </div>
       <!-- header -->
       <!-- timeline -->
-      <div class="container py-3 d-flex gap-4 flex-wrap">
+      <div class="container py-3 d-flex gap-4 flex-wrap pb-5">
         <!-- 注意事項 -->
         <div class="alert alert-warning rounded mb-2 mb-md-5" role="alert">
           <div class="d-flex gap-2 align-items-center mb-2">
@@ -125,7 +125,7 @@
                 :src="'./assets/img/'+ selectedUser +'.png'"
                 width="50"
                 height="50"
-                alt="キャストさんの宣材写真"
+                alt="ユーザーのイメージアイコン"
                 class="rounded-pill bg-white border"
                 style="object-fit: cover"
               />
@@ -135,8 +135,9 @@
         <!-- 男性側のトーク -->
       </div>
       <!-- timeline -->
+      <div class="py-3"></div>
       <!-- nav -->
-      <div class="bg-white position-fixed bottom-0 end-0 w-100">
+      <div class="bg-white position-fixed bottom-0 end-0 w-100 mt-4">
         <div class="container">
           <div action="" class="py-2 py-md-3">
             <div class="row justify-content-center">
@@ -152,7 +153,7 @@
               </div>
               <div class="col-auto px-0">
                 <button
-                  class="btn btn-link text-decoration-none"
+                  class="btn btn-link text-decoration-none shadow-none"
                   data-bs-toggle="modal"
                   data-bs-target="#Modal"
                 >
@@ -182,22 +183,58 @@
               ></button>
             </div>
             <div class="modal-body">
+              <div class="alert alert-warning" role="alert">
+                <p class="m-0">
+                  ユーザーは女性や店舗にスコアとして評価付けされ、そのスコアのレートによってトークするための<span
+                    class="fw-bold"
+                    >課金額が変動</span
+                  >するよ。<span class="fw-bold">綺麗に遊ぶお客さんは優遇</span
+                  >されるし、スコアの低い<span class="fw-bold"
+                    >悪質なユーザーは逆に冷遇</span
+                  >するよ。
+                  女性または店舗からの評価によって機能の体験を変えることで、ユーザーは綺麗に遊ぶようになるし、課金制にすることで無駄なトークのラリーを控えるようになるよ。
+                </p>
+              </div>
               <p class="">
-                ユーザーは女性や店舗にスコアとして評価付けされ、そのスコアのレートによって課金額が変動するよ。綺麗に遊ぶ本指名さんは優遇されるし、スコアの低い悪質なユーザーは逆に冷遇するよ。
-                女性または店舗からの評価によって機能の体験を変えることで、ユーザーは綺麗に遊ぶようになるし、課金制にすることで無駄なトークのラリーを控えるようになるよ。
+                <span
+                  >{{message.length}}文字
+                  <span class="text-muted px-0 small">（文字数）</span></span
+                >×
+                <span
+                  >{{selectedUser * 10}}
+                  <span class="text-muted px-0 small"
+                    >（スコアレート）</span
+                  ></span
+                >×
+                <span
+                  >{{talks.length + 1}}
+                  <span class="text-muted px-0 small"
+                    >（トーク回数）</span
+                  ></span
+                >=
               </p>
-              <p class="">{{message.length}}文字×{{selectedUser}}=</p>
-              <p class="fw-bold"><span class="small">円</span></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="small text-body">トークを送信するのに必要なコスト</p>
+                <p class="fw-bold">
+                  <span class="fs-4">{{sum.toLocaleString()}}</span>
+                  <span class="small ps-1">円</span>
+                </p>
+              </div>
             </div>
             <div class="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                class="btn btn-secondary col-12 col-md-auto"
                 data-bs-dismiss="modal"
+                ref="closeButton"
               >
                 閉じる
               </button>
-              <button type="button" class="btn btn-primary" @click="addTalk">
+              <button
+                type="button"
+                class="btn btn-primary col-12 col-md-auto"
+                @click="addTalk"
+              >
                 <span class="fw-bold"
                   >（課金するという体裁で）トークを送る</span
                 >
@@ -216,14 +253,14 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
       const { createApp } = Vue;
-
       createApp({
         data() {
           return {
             message: "",
             today: "",
             talks: [],
-            selectedUser: null,
+            showModal: false,
+            selectedUser: 1,
             users: [
               {
                 id: 1,
@@ -265,6 +302,15 @@
           ];
           this.today = `${month}月${day}日(${week})`;
         },
+        computed: {
+          sum() {
+            return (
+              this.message.length *
+              (this.selectedUser * 10) *
+              (this.talks.length + 1)
+            );
+          },
+        },
         methods: {
           selectUser() {
             console.log(this.selectedUser);
@@ -273,6 +319,8 @@
           },
           addTalk() {
             this.talks.push(this.message);
+            this.$refs.closeButton.click();
+            this.message = "";
           },
         },
       }).mount("#app");
