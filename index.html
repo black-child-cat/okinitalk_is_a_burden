@@ -53,7 +53,7 @@
             </div>
             <div class="col-auto">
               <select
-                class="form-select pe-4"
+                class="form-select"
                 v-model="selectedUser"
                 @change="selectUser"
               >
@@ -147,6 +147,35 @@
               />
             </figure>
           </div>
+
+          <!-- 女性側のメッセージ -->
+            <div class="col-12 row d-flex justify-content-start">
+                <div class="col-auto">
+                <figure>
+                    <img
+                    src="./assets/img/cast.png"
+                    width="50"
+                    height="50"
+                    alt="キャストさんの宣材写真"
+                    class="rounded-pill"
+                    style="object-fit: cover"
+                    />
+                </figure>
+                </div>
+                <div class="col col-md-auto">
+                <div class="bg-white rounded py-3 px-4 shadow-sm position-relative">
+                    <p class="lh-lg text-muted" style="filter: blur(5px);">
+                    変なメッセージを送ると相手は困惑するよ<br />
+                    良識のある人なら相手の迷惑になる内容は避けるよね<br>
+                    それが出来ない人間は嫌われちゃうよ！
+                    </p>
+                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                        <p class="m-0 d-inline-block px-3 bg-dark text-white rounded-pill lh-lg small">※女性の返信</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- 女性側のメッセージ -->
         </div>
         <!-- 男性側のトーク -->
       </div>
@@ -158,11 +187,11 @@
           <div action="" class="py-2 py-md-3">
             <div v-if="(5 - selectedUser) <= talks.length" class="text-center">
               <p class="m-0 small">
-                トーク回数の上限に達しました。利用すると解除されます。
+                トーク回数の上限に達しました。<br>利用すると解除されます。
               </p>
             </div>
             <div v-else class="row justify-content-center">
-              <div class="col-10 col-md-9 pe-0">
+              <div class="col-9 col-md-10 col-md-9 pe-0">
                 <textarea
                   v-model="message"
                   class="form-control bg-light rounded border-0"
